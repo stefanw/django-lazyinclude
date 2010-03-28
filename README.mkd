@@ -28,7 +28,7 @@ Round 2: Take cached template and lazily include referenced template:
     {% lazyinclude &quot;evil_template.html&quot; %}
     ...</html>
 
-Since the " of evil_user_input are autoescaped to &amp;quot;
-the fake lazyinclude tag gets not recognised by the regex.
+Since the " of output_of_user_input are autoescaped (you got autoescaping, don't you?) to &amp;quot;
+the fake lazyinclude tag isn't recognised by the regex.
 
 When the LazyIncludeMiddleware is not detected, the lazyinclude template tag will act like a normal include tag.
