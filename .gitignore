@@ -1,4 +1,5 @@
 bin/*
 include/*
+build/*
 lib/*
 *.py[co]

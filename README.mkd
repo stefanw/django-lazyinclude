@@ -1,0 +1,34 @@
+django-lazyinclude
+==================
+
+Renders lazyinclude snippets into cached responses. A simple and safe two-phase rendering approach to caching  templates with some expensive non-session-dependent parts and session-depend parts ("You are logged in").
+
+A simple example and demonstration why I think this approach is safe:
+
+    <html>...
+    {{ result_of_expensive_database_hit }}
+    {% lazyinclude "_login.html" %}
+    {{ output_of_user_input }}
+    ...</html>
+
+Round 1: Template rendering to cache.
+The lazyinclude-tags are left intact, the evil user tries to fake a lazyinclude:
+
+    <html>...
+    42 (the actual result of the expensive database hit)
+    {% lazyinclude "_login.html" %}
+    {% lazyinclude &quot;evil_template.html&quot; %}
+    ...</html>
+    
+Round 2: Take cached template and lazily include referenced template:
+
+    <html>...
+    The actual result of database hit
+    Hello User, nice to see you again.
+    {% lazyinclude &quot;evil_template.html&quot; %}
+    ...</html>
+
+Since the " of evil_user_input are autoescaped to &amp;quot;
+the fake lazyinclude tag gets not recognised by the regex.
+
+When the LazyIncludeMiddleware is not detected, the lazyinclude template tag will act like a normal include tag.
